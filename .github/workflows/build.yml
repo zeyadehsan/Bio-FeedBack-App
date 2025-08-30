@@ -9,15 +9,14 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      # Recreate serviceAccountKey.json from GitHub secret
       - name: Restore Firebase key
         run: |
           echo "${{ secrets.FIREBASE_SA_BASE64 }}" | base64 --decode > serviceAccountKey.json
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -28,7 +27,7 @@ jobs:
         run: pyinstaller --onefile breathing_gui_ver7.py
 
       - name: Upload exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Windows-Exe
           path: dist/*.exe
@@ -36,15 +35,14 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      # Recreate serviceAccountKey.json from GitHub secret
       - name: Restore Firebase key
         run: |
           echo "${{ secrets.FIREBASE_SA_BASE64 }}" | base64 --decode > serviceAccountKey.json
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -55,7 +53,7 @@ jobs:
         run: pyinstaller --onefile breathing_gui_ver7.py
 
       - name: Upload Mac build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MacOS-App
           path: dist/*
