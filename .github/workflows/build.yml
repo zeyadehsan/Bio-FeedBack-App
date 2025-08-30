@@ -1,4 +1,4 @@
-name: Build App
+name: Build Mac App
 
 on:
   push:
@@ -6,32 +6,6 @@ on:
       - main
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore Firebase key
-        run: |
-          echo "${{ secrets.FIREBASE_SA_BASE64 }}" | base64 --decode > serviceAccountKey.json
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt pyinstaller
-
-      - name: Build Windows exe
-        run: pyinstaller --onefile breathing_gui_ver7.py
-
-      - name: Upload exe
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows-Exe
-          path: dist/*.exe
-
   build-macos:
     runs-on: macos-latest
     steps:
