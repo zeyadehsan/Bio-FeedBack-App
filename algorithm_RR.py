@@ -3,11 +3,15 @@ from firebase_admin import credentials, db
 
 
 
-# Init Firebase app
-cred = credentials.Certificate("serviceAccountKey.json")
-firebase_admin.initialize_app(cred, {
-    "databaseURL": "https://biofeedback-a3a9d-default-rtdb.firebaseio.com/"
-})
+load_dotenv()
+
+cred_path = os.getenv("FIREBASE_CREDENTIALS")
+db_url = os.getenv("FIREBASE_DB_URL")
+
+    cred = credentials.Certificate(cred_path)
+    firebase_admin.initialize_app(cred, {
+        "databaseURL": db_url
+    })
 
 def get_latest_respiratory_rate():
     ref = db.reference("processed_sensor_logs")
