@@ -1,16 +1,18 @@
-name: Build Mac App
+name: Build macOS App
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build-macos:
     runs-on: macos-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,22 +25,12 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build Mac App
+      - name: Build app with PyInstaller
         run: |
-          pyinstaller --noconfirm --windowed \
-            --hidden-import=torch \
-            --hidden-import=tensorflow \
-            --hidden-import=cv2 \
-            --collect-all PyQt6 \
-            --collect-all matplotlib \
-            --collect-all moviepy \
-            --add-data "emotion_detector_module.py:." \
-            --add-data "algorithm_RR.py:." \
-            --add-data "firebase_fetch.py:." \
-            breathing_gui_ver7.py
+          pyinstaller --onefile --windowed breathing_gui_ver7.py
 
-      - name: Upload App Bundle
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-app
-          path: dist/*.app
+          path: dist/
